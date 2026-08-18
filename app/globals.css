@@ -7,10 +7,9 @@
   --font-serif: "Lora", Georgia, Cambria, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Custom elegant Editorial theme colors */
   --color-primary-50: #F8FAFC;
   --color-primary-100: #E2E8F0;
-  --color-primary-500: #0F172A; /* Editorial focus is on dark ink */
+  --color-primary-500: #0F172A;
   --color-primary-600: #1E293B;
   --color-primary-700: #0F172A;
   
@@ -20,10 +19,9 @@
   --color-secondary-600: #57534E;
 
   --color-accent-50: #F0FDF4;
-  --color-accent-500: #2563EB; /* A tasteful electric blue accent, like a premium digital publication */
+  --color-accent-500: #2563EB;
 }
 
-/* Custom scroll bar style */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -42,15 +40,13 @@
   background: #CBD5E1;
 }
 
-/* Fluid styling tags */
 body {
-  background-color: #FAF9F6; /* Bookish warm off-white */
-  color: #111827; /* Rich dark slate/charcoal */
+  background-color: #FAF9F6;
+  color: #111827;
   font-family: var(--font-sans);
   overflow-x: hidden;
 }
 
-/* Markdown typography helper */
 .markdown-body h1, .markdown-body h2, .markdown-body h3 {
   font-family: var(--font-display);
   font-weight: 700;
@@ -94,4 +90,3 @@ body {
   color: #475569;
   margin: 1.5rem 0;
 }
-

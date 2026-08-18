@@ -1,19 +1,32 @@
+"use client";
+
 import React from "react";
-import { ArrowLeft, ShieldAlert, Heart, Calendar, BookOpen, Clock, AlertTriangle, AlertCircle, Info, Check } from "lucide-react";
-import { Medicine } from "../types";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, BookOpen, Clock, AlertTriangle, AlertCircle, Info, Check } from "lucide-react";
+import { Medicine } from "@/lib/types";
 
 interface MedicineDetailPageProps {
   medicine: Medicine;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 export default function MedicineDetailPage({ medicine, onBack }: MedicineDetailPageProps) {
+  const router = useRouter();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
+
   return (
-    <div className="space-y-8" id="medicine-detail-page">
+    <div className="space-y-8 w-full mx-auto py-6" id="medicine-detail-page">
       {/* Navigation */}
       <div className="flex items-center justify-between">
         <button 
-          onClick={onBack}
+          onClick={handleBack}
           className="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 font-sans font-semibold text-xs cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -31,7 +44,7 @@ export default function MedicineDetailPage({ medicine, onBack }: MedicineDetailP
           <img 
             src={medicine.image} 
             alt={medicine.name} 
-            className="h-full w-full object-contain mix-blend-multiply rounded-xl referrerPolicy='no-referrer'"
+            className="h-full w-full object-contain mix-blend-multiply rounded-xl"
             referrerPolicy="no-referrer"
           />
         </div>
@@ -200,7 +213,7 @@ export default function MedicineDetailPage({ medicine, onBack }: MedicineDetailP
             </div>
           </div>
 
-          {/* Storage & Dispersal */}
+          {/* Storage */}
           <div className="bg-slate-50 border border-slate-100 p-5 rounded-3xl text-xs leading-relaxed">
             <span className="font-bold text-slate-900 block mb-1">Clinical Storage Protocols</span>
             <p className="text-slate-600">{medicine.storage}</p>

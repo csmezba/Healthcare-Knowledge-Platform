@@ -1,8 +1,11 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Sparkles, ShieldAlert, HeartHandshake, ArrowLeft, RefreshCw, MessageSquare } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Send, Sparkles, ShieldAlert, ArrowLeft, RefreshCw, MessageSquare } from "lucide-react";
 
 interface AIAssistantProps {
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 interface Message {
@@ -13,11 +16,13 @@ interface Message {
 }
 
 export default function AIAssistant({ onBack }: AIAssistantProps) {
+  const router = useRouter();
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "initial-1",
       sender: "ai",
-      text: "Hello! I am AuraCare's verified AI Health Information Assistant. I can help answer questions about drugs, diseases, medical equipment specifications, first-aid tips, and general nutrition metrics.\n\n*What would you like to explore today?*",
+      text: "Hello! I am TakeCare's verified AI Health Information Assistant. I can help answer questions about drugs, diseases, medical equipment specifications, first-aid tips, and general nutrition metrics.\n\n*What would you like to explore today?*",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -28,6 +33,14 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
 
   const handleSendMessage = async (textToSend: string) => {
     if (!textToSend.trim()) return;
@@ -81,13 +94,11 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
     "What is the difference between ApoB and standard LDL?"
   ];
 
-  // Helper to parse Markdown/Text lines into styled HTML elements
   const renderMessageText = (text: string) => {
     const lines = text.split("\n");
     return lines.map((line, idx) => {
       let trimmed = line.trim();
       
-      // Check for bullet list
       if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
         return (
           <li key={idx} className="ml-5 list-disc text-sm text-slate-700 leading-relaxed mb-1">
@@ -95,7 +106,6 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
           </li>
         );
       }
-      // Check for bold highlights
       if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
         return (
           <p key={idx} className="font-bold text-slate-900 mt-2 mb-1">
@@ -103,7 +113,6 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
           </p>
         );
       }
-      // Check for headers
       if (trimmed.startsWith("###")) {
         return (
           <h4 key={idx} className="font-display font-bold text-slate-900 text-sm mt-3 mb-1 tracking-tight">
@@ -112,7 +121,6 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
         );
       }
       
-      // Simple word-by-word bold highlighting inside a normal paragraph
       if (trimmed) {
         return (
           <p key={idx} className="text-sm text-slate-700 leading-relaxed mb-2.5">
@@ -138,7 +146,7 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
       <div className="bg-slate-950 p-6 text-white flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button 
-            onClick={onBack}
+            onClick={handleBack}
             className="p-2 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
             title="Go back"
           >
@@ -149,7 +157,7 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
           </div>
           <div>
             <h3 className="font-display font-bold text-base tracking-tight flex items-center gap-2">
-              AuraCare Clinical AI
+              TakeCare Clinical AI
               <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full font-mono">3.5-Flash</span>
             </h3>
             <p className="text-xs text-slate-400">Expert medical context engine</p>
@@ -160,7 +168,7 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
           onClick={() => setMessages([{
             id: "initial-1",
             sender: "ai",
-            text: "Hello! I am AuraCare's verified AI Health Information Assistant. I can help answer questions about drugs, diseases, medical equipment specifications, first-aid tips, and general nutrition metrics.\n\n*What would you like to explore today?*",
+            text: "Hello! I am TakeCare's verified AI Health Information Assistant. I can help answer questions about drugs, diseases, medical equipment specifications, first-aid tips, and general nutrition metrics.\n\n*What would you like to explore today?*",
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }])}
           className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition-all cursor-pointer text-xs flex items-center gap-1 font-medium"
@@ -174,7 +182,7 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
       <div className="bg-amber-50/70 border-b border-amber-100 p-4 px-6 flex gap-3">
         <ShieldAlert className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
         <div className="text-xs text-amber-800 leading-relaxed">
-          <span className="font-bold">Clinical Information Disclaimer:</span> AuraCare AI Assistant answers are for informational, educational purposes based on general medical guidelines. This agent does not provide personalized clinical diagnoses, prescription advice, or direct treatment plans. Always consult your primary care doctor or professional clinician for personal health concerns.
+          <span className="font-bold">Clinical Information Disclaimer:</span> TakeCare AI Assistant answers are for informational, educational purposes based on general medical guidelines. This agent does not provide personalized clinical diagnoses, prescription advice, or direct treatment plans. Always consult your primary care doctor or professional clinician for personal health concerns.
         </div>
       </div>
 
@@ -221,7 +229,7 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
               AI
             </div>
             <div className="bg-white border border-slate-100 p-4 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
-              <span className="text-xs text-slate-500 font-medium">Querying AuraCare database...</span>
+              <span className="text-xs text-slate-500 font-medium">Querying TakeCare database...</span>
               <div className="flex gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-600 animate-bounce delay-75"></span>
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-600 animate-bounce delay-150"></span>
@@ -233,7 +241,7 @@ export default function AIAssistant({ onBack }: AIAssistantProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Suggested Chips (Only shown when chat is quiet) */}
+      {/* Suggested Chips */}
       {messages.length === 1 && (
         <div className="p-6 bg-white border-t border-slate-100/60">
           <p className="text-xs text-slate-400 font-mono uppercase tracking-wider mb-2.5 flex items-center gap-1.5">

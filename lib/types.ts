@@ -1,7 +1,7 @@
 export interface Author {
   id: string;
   name: string;
-  role: string; // e.g., "M.D., Cardiologist", "Registered Pharmacist (RPh)"
+  role: string;
   bio: string;
   avatar: string;
   expertise: string[];
@@ -27,15 +27,15 @@ export interface Article {
   id: string;
   title: string;
   summary: string;
-  content: string; // markdown or plain text paragraphs
+  content: string;
   category: "Medicines" | "Diseases" | "Medical Equipment" | "Health Tips" | "Nutrition" | "First Aid" | "Vitamins" | "Men's Health" | "Women's Health";
   author: Author;
-  medicalReviewer?: Author; // Trusted board certification reviewer
-  readTime: string; // e.g., "5 min read"
+  medicalReviewer?: Author;
+  readTime: string;
   date: string;
   image: string;
   tags: string[];
-  popularity: number; // For trending ranking
+  popularity: number;
   likes: number;
   references: ReferenceItem[];
   faqs: FAQItem[];
@@ -47,9 +47,9 @@ export interface Medicine {
   name: string;
   genericName: string;
   brandNames: string[];
-  type: string; // e.g. "Analgesic", "Antihypertensive", "Antibiotic"
+  type: string;
   prescriptionStatus: "Over-the-Counter (OTC)" | "Rx - Prescription Required";
-  dosageForms: string[]; // e.g. ["Tablet", "Capsule", "Oral Suspension"]
+  dosageForms: string[];
   image: string;
   overview: string;
   uses: string[];

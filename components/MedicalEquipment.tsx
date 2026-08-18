@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState } from "react";
-import { Star, Shield, HelpCircle, Eye, RefreshCw, Sparkles, BookOpen, X, Check } from "lucide-react";
-import { Equipment } from "../types";
-import { medicalEquipment } from "../data";
+import { Star, Shield, Eye, RefreshCw, Sparkles, X, Check } from "lucide-react";
+import { Equipment } from "@/lib/types";
+import { medicalEquipment } from "@/lib/data";
 
 export default function MedicalEquipment() {
   const [activeEquipment, setActiveEquipment] = useState<Equipment | null>(null);
@@ -12,7 +14,7 @@ export default function MedicalEquipment() {
   });
 
   return (
-    <div className="space-y-6" id="equipment-showcase">
+    <div className="space-y-6 w-full mx-auto py-4" id="equipment-showcase">
       <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span className="text-xs text-indigo-600 font-bold font-mono uppercase tracking-widest flex items-center gap-1.5 mb-1">
@@ -99,7 +101,7 @@ export default function MedicalEquipment() {
         ))}
       </div>
 
-      {/* DETAILED MEDICAL EQUIPMENT SPECIFICATIONS MODAL */}
+      {/* DETAILED MEDICAL EQUIPMENT POPUP */}
       {activeEquipment && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl relative border border-slate-100">
@@ -123,7 +125,6 @@ export default function MedicalEquipment() {
               </h3>
 
               <div className="space-y-6">
-                {/* Complete specifications list */}
                 <div>
                   <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Technical Specifications</h5>
                   <div className="bg-slate-50 rounded-2xl border border-slate-100 divide-y divide-slate-100 overflow-hidden">
@@ -136,7 +137,6 @@ export default function MedicalEquipment() {
                   </div>
                 </div>
 
-                {/* Benefits */}
                 <div>
                   <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Primary Advantages</h5>
                   <div className="space-y-2">
@@ -149,7 +149,6 @@ export default function MedicalEquipment() {
                   </div>
                 </div>
 
-                {/* Operations checklist */}
                 <div>
                   <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Aseptic Operating Checklist</h5>
                   <ol className="space-y-2 bg-blue-50/30 p-4 rounded-2xl border border-blue-50">
@@ -162,7 +161,6 @@ export default function MedicalEquipment() {
                   </ol>
                 </div>
 
-                {/* Maintenance & Cleaning */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                     <h6 className="text-xs font-bold text-slate-900 mb-1 flex items-center gap-1">
@@ -180,7 +178,6 @@ export default function MedicalEquipment() {
                   </div>
                 </div>
 
-                {/* Buying recommendation */}
                 <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl">
                   <h6 className="text-xs font-bold text-indigo-950 mb-1 flex items-center gap-1.5 font-display">
                     <Sparkles className="h-4 w-4 fill-indigo-600 text-indigo-200" />

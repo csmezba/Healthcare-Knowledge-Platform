@@ -1,32 +1,42 @@
+"use client";
+
 import React, { useState } from "react";
-import { Search, Eye, ArrowRightLeft, Shield, AlertTriangle, Sparkles, Scale, Info, Check } from "lucide-react";
-import { Medicine } from "../types";
-import { medicines } from "../data";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Search, Eye, ArrowRightLeft, AlertTriangle, Scale, Check } from "lucide-react";
+import { Medicine } from "@/lib/types";
+import { medicines } from "@/lib/data";
 
 interface MedicineDatabaseProps {
-  onSelectMedicine: (id: string) => void;
-  searchQuery: string;
+  onSelectMedicine?: (id: string) => void;
+  searchQuery?: string;
 }
 
-export default function MedicineDatabase({ onSelectMedicine, searchQuery }: MedicineDatabaseProps) {
+export default function MedicineDatabase({ onSelectMedicine, searchQuery = "" }: MedicineDatabaseProps) {
+  const router = useRouter();
+
   const [searchTerm, setSearchTerm] = useState(searchQuery || "");
   const [selectedType, setSelectedType] = useState<string>("All");
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
-  
-  // State for drug comparison
   const [compareList, setCompareList] = useState<Medicine[]>([]);
 
-  // Update local search term if prop changes
   React.useEffect(() => {
     if (searchQuery) setSearchTerm(searchQuery);
   }, [searchQuery]);
+
+  const handleSelect = (id: string) => {
+    if (onSelectMedicine) {
+      onSelectMedicine(id);
+    } else {
+      router.push(`/medicines/${id}`);
+    }
+  };
 
   const handleToggleCompare = (medicine: Medicine) => {
     if (compareList.some(item => item.id === medicine.id)) {
       setCompareList(compareList.filter(item => item.id !== medicine.id));
     } else {
       if (compareList.length >= 2) {
-        // limit comparison to 2 items for premium side-by-side visual density
         alert("You can compare up to 2 drugs side-by-side.");
         return;
       }
@@ -34,7 +44,6 @@ export default function MedicineDatabase({ onSelectMedicine, searchQuery }: Medi
     }
   };
 
-  // Types list based on actual items
   const types = ["All", "Analgesic / Anti-inflammatory", "Antihypertensive / ACE Inhibitor", "Antibiotic / Antibacterial"];
   const statuses = ["All", "Over-the-Counter (OTC)", "Rx - Prescription Required"];
 
@@ -50,7 +59,7 @@ export default function MedicineDatabase({ onSelectMedicine, searchQuery }: Medi
   });
 
   return (
-    <div className="space-y-6" id="medicine-search-section">
+    <div className="space-y-6 w-full mx-auto py-4" id="medicine-search-section">
       {/* Search and Filters Header */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-md">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-5">
@@ -122,7 +131,6 @@ export default function MedicineDatabase({ onSelectMedicine, searchQuery }: Medi
               className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all flex flex-col justify-between group"
             >
               <div className="p-5">
-                {/* Status and category headers */}
                 <div className="flex items-center justify-between gap-2 mb-3.5">
                   <span className={`text-[9px] font-bold uppercase px-2.5 py-1 rounded-md tracking-wider border ${
                     med.prescriptionStatus.includes("OTC") 
@@ -134,14 +142,15 @@ export default function MedicineDatabase({ onSelectMedicine, searchQuery }: Medi
                   <span className="text-[10px] text-slate-400 font-mono font-medium">{med.type}</span>
                 </div>
 
-                <h4 className="font-display font-extrabold text-slate-900 text-base mb-1 group-hover:text-blue-600 transition-colors">
-                  {med.name}
-                </h4>
+                <Link href={`/medicines/${med.id}`}>
+                  <h4 className="font-display font-extrabold text-slate-900 text-base mb-1 group-hover:text-blue-600 transition-colors">
+                    {med.name}
+                  </h4>
+                </Link>
                 <p className="text-xs text-slate-400 font-medium italic mb-3">{med.genericName}</p>
                 
                 <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 mb-4">{med.overview}</p>
 
-                {/* Brand equivalents list */}
                 <div className="border-t border-slate-50 pt-3 mb-4">
                   <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Equivalent Brands:</span>
                   <div className="flex flex-wrap gap-1 mt-1">
@@ -154,10 +163,9 @@ export default function MedicineDatabase({ onSelectMedicine, searchQuery }: Medi
                 </div>
               </div>
 
-              {/* Action buttons footer */}
               <div className="bg-slate-50/50 border-t border-slate-50 p-4 flex gap-2">
                 <button
-                  onClick={() => onSelectMedicine(med.id)}
+                  onClick={() => handleSelect(med.id)}
                   className="flex-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Eye className="h-3.5 w-3.5 text-slate-500" />

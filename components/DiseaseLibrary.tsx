@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState } from "react";
-import { ShieldAlert, BookOpen, Clock, HeartHandshake, Eye, AlertCircle, X, CheckCircle } from "lucide-react";
-import { Disease } from "../types";
-import { diseases } from "../data";
+import { ShieldAlert, BookOpen, Clock, X, CheckCircle } from "lucide-react";
+import { Disease } from "@/lib/types";
+import { diseases } from "@/lib/data";
 
 export default function DiseaseLibrary() {
   const [activeDisease, setActiveDisease] = useState<Disease | null>(null);
@@ -16,7 +18,7 @@ export default function DiseaseLibrary() {
   };
 
   return (
-    <div className="space-y-6" id="diseases-library">
+    <div className="space-y-6 w-full mx-auto py-4" id="diseases-library">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span className="text-xs text-teal-600 font-bold font-mono uppercase tracking-widest flex items-center gap-1.5 mb-1">

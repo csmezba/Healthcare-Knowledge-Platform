@@ -1,13 +1,14 @@
+"use client";
+
 import React from "react";
-import { Check, Mail, Linkedin, Twitter, Sparkles, Award } from "lucide-react";
-import { Author } from "../types";
-import { authors } from "../data";
+import { Check, Mail, Linkedin, Twitter, Award } from "lucide-react";
+import { authors } from "@/lib/data";
 
 export default function ExpertAuthors() {
   const authorList = Object.values(authors);
 
   return (
-    <div className="space-y-6" id="expert-authors">
+    <div className="space-y-6 w-full mx-auto py-4" id="expert-authors">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-5">
         <div>
           <span className="text-xs text-blue-600 font-bold font-mono uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
@@ -30,7 +31,7 @@ export default function ExpertAuthors() {
               <img 
                 src={author.avatar} 
                 alt={author.name} 
-                className="h-24 w-24 rounded-2xl object-cover border border-slate-100 shadow-sm referrerPolicy='no-referrer'"
+                className="h-24 w-24 rounded-2xl object-cover border border-slate-100 shadow-sm"
                 referrerPolicy="no-referrer"
               />
               <span className="absolute -bottom-1.5 -right-1.5 h-6 w-6 bg-emerald-500 text-white rounded-full flex items-center justify-center border-2 border-white shadow-sm" title="Verified Professional Credential">

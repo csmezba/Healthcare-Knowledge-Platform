@@ -1,5 +1,5 @@
 {
-  "name": "AuraCare Healthcare Knowledge Platform",
+  "name": "TakeCare Healthcare Knowledge Platform",
   "description": "An ultra-premium, AI-powered healthcare publication, medicine encyclopedia, disease library, and diagnostic equipment showcase featuring interactive health tools.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

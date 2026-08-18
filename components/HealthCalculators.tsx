@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Activity, Calculator, Droplet, Heart, ShieldAlert, Sparkles, Scale, Info } from "lucide-react";
 
@@ -14,11 +16,11 @@ export default function HealthCalculators() {
   const [bmrHeight, setBmrHeight] = useState<number>(175);
   const [bmrAge, setBmrAge] = useState<number>(30);
   const [bmrGender, setBmrGender] = useState<"male" | "female">("male");
-  const [bmrActivity, setBmrActivity] = useState<string>("1.375"); // Lightly active
+  const [bmrActivity, setBmrActivity] = useState<string>("1.375");
 
   // State for Water Intake
   const [waterWeight, setWaterWeight] = useState<number>(70);
-  const [waterExercise, setWaterExercise] = useState<number>(30); // minutes of exercise
+  const [waterExercise, setWaterExercise] = useState<number>(30);
 
   // State for Heart Rate
   const [hrAge, setHrAge] = useState<number>(30);
@@ -28,14 +30,12 @@ export default function HealthCalculators() {
   const [bpSystolic, setBpSystolic] = useState<number>(120);
   const [bpDiastolic, setBpDiastolic] = useState<number>(80);
 
-  // calculations
   const calculateBMI = () => {
     let bmiValue = 0;
     if (bmiUnit === "metric") {
       const heightInMeters = bmiHeight / 100;
       bmiValue = bmiWeight / (heightInMeters * heightInMeters);
     } else {
-      // weight in lbs, height in inches
       bmiValue = (bmiWeight / (bmiHeight * bmiHeight)) * 703;
     }
     return Math.round(bmiValue * 10) / 10;
@@ -51,7 +51,6 @@ export default function HealthCalculators() {
   const calculateBMR = () => {
     let bmrValue = 0;
     if (bmrGender === "male") {
-      // Mifflin-St Jeor Formula
       bmrValue = 10 * bmrWeight + 6.25 * bmrHeight - 5 * bmrAge + 5;
     } else {
       bmrValue = 10 * bmrWeight + 6.25 * bmrHeight - 5 * bmrAge - 161;
@@ -60,7 +59,6 @@ export default function HealthCalculators() {
   };
 
   const calculateWaterIntake = () => {
-    // Basic baseline is 35ml per kg of bodyweight plus 12.5ml per minute of heavy exercise
     const base = waterWeight * 35;
     const extra = waterExercise * 12.5;
     const totalMl = base + extra;
@@ -75,10 +73,10 @@ export default function HealthCalculators() {
     const hrReserve = maxHR - hrResting;
     return {
       max: maxHR,
-      zone1: { min: Math.round(hrResting + hrReserve * 0.5), max: Math.round(hrResting + hrReserve * 0.6) }, // Warm Up
-      zone2: { min: Math.round(hrResting + hrReserve * 0.6), max: Math.round(hrResting + hrReserve * 0.7) }, // Fat Burn (Zone 2)
-      zone3: { min: Math.round(hrResting + hrReserve * 0.7), max: Math.round(hrResting + hrReserve * 0.8) }, // Aerobic
-      zone4: { min: Math.round(hrResting + hrReserve * 0.8), max: Math.round(hrResting + hrReserve * 0.9) }  // Anaerobic
+      zone1: { min: Math.round(hrResting + hrReserve * 0.5), max: Math.round(hrResting + hrReserve * 0.6) },
+      zone2: { min: Math.round(hrResting + hrReserve * 0.6), max: Math.round(hrResting + hrReserve * 0.7) },
+      zone3: { min: Math.round(hrResting + hrReserve * 0.7), max: Math.round(hrResting + hrReserve * 0.8) },
+      zone4: { min: Math.round(hrResting + hrReserve * 0.8), max: Math.round(hrResting + hrReserve * 0.9) }
     };
   };
 
@@ -99,7 +97,7 @@ export default function HealthCalculators() {
   };
 
   return (
-    <div className="bg-white border border-slate-100 rounded-3xl shadow-xl overflow-hidden p-6 lg:p-8" id="health-calculators">
+    <div className="bg-white border border-slate-100 rounded-3xl shadow-xl overflow-hidden p-6 lg:p-8 w-full mx-auto my-4" id="health-calculators">
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6 mb-6">
         <div>
@@ -108,7 +106,7 @@ export default function HealthCalculators() {
             <span>Interactive Laboratory Suite</span>
           </span>
           <h2 className="font-display font-black text-2xl md:text-3xl text-slate-950 tracking-tight">
-            AuraCare Health Calculators
+            TakeCare Health Calculators
           </h2>
           <p className="text-sm text-slate-500 font-medium">Verify your biometrics using standard clinical equations.</p>
         </div>
@@ -167,16 +165,15 @@ export default function HealthCalculators() {
         </button>
       </div>
 
-      {/* Grid Layout containing inputs on left and outputs on right */}
+      {/* Grid Layout */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         
-        {/* TAB CONTENT: BMI CALCULATOR */}
+        {/* TAB CONTENT: BMI */}
         {activeTab === "bmi" && (
           <>
             <div className="md:col-span-5 space-y-4">
               <h3 className="font-display font-bold text-slate-900 text-base">Biometric Inputs</h3>
               
-              {/* Unit selection */}
               <div className="flex gap-2 bg-slate-50 p-1 rounded-xl">
                 <button
                   onClick={() => { setBmiUnit("metric"); setBmiWeight(70); setBmiHeight(175); }}
@@ -192,7 +189,6 @@ export default function HealthCalculators() {
                 </button>
               </div>
 
-              {/* Weight Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Weight</span>
@@ -208,7 +204,6 @@ export default function HealthCalculators() {
                 />
               </div>
 
-              {/* Height Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Height</span>
@@ -233,7 +228,6 @@ export default function HealthCalculators() {
                   <span className="text-xs text-slate-500 font-mono">kg/m²</span>
                 </div>
                 
-                {/* Category Badge */}
                 {(() => {
                   const category = getBMICategory(calculateBMI());
                   return (
@@ -249,7 +243,6 @@ export default function HealthCalculators() {
                 </p>
               </div>
 
-              {/* Clinical Advice box */}
               <div className="mt-6 p-4 bg-white rounded-xl border border-slate-100 text-xs text-slate-700 leading-relaxed">
                 <span className="font-bold text-slate-900 block mb-1">Board Certification Advice:</span>
                 Aim for a balanced diet rich in leafy greens, complex carbohydrates, and fiber while undertaking regular aerobic cardiovascular habits to target healthy metabolic boundaries.
@@ -258,13 +251,12 @@ export default function HealthCalculators() {
           </>
         )}
 
-        {/* TAB CONTENT: BMR & DAILY ENERGY */}
+        {/* TAB CONTENT: BMR */}
         {activeTab === "bmr" && (
           <>
             <div className="md:col-span-5 space-y-4">
               <h3 className="font-display font-bold text-slate-900 text-base">Metabolic Inputs</h3>
               
-              {/* Gender selector */}
               <div className="flex gap-2">
                 <button
                   onClick={() => setBmrGender("male")}
@@ -280,7 +272,6 @@ export default function HealthCalculators() {
                 </button>
               </div>
 
-              {/* Age, Weight, Height inputs */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-slate-500 uppercase">Age</label>
@@ -311,7 +302,6 @@ export default function HealthCalculators() {
                 </div>
               </div>
 
-              {/* Activity Multiplier */}
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-slate-500 uppercase block">Daily Activity Profile</label>
                 <select
@@ -358,13 +348,12 @@ export default function HealthCalculators() {
           </>
         )}
 
-        {/* TAB CONTENT: HYDRATION INTAKE */}
+        {/* TAB CONTENT: WATER */}
         {activeTab === "water" && (
           <>
             <div className="md:col-span-5 space-y-5">
               <h3 className="font-display font-bold text-slate-900 text-base">Hydration Inputs</h3>
               
-              {/* Weight selection */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Body Mass (Weight)</span>
@@ -380,7 +369,6 @@ export default function HealthCalculators() {
                 />
               </div>
 
-              {/* Workout load */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Physical Activity Duration</span>
@@ -429,13 +417,12 @@ export default function HealthCalculators() {
           </>
         )}
 
-        {/* TAB CONTENT: CARDIO ZONES */}
+        {/* TAB CONTENT: HEART */}
         {activeTab === "heart" && (
           <>
             <div className="md:col-span-5 space-y-5">
               <h3 className="font-display font-bold text-slate-900 text-base">Cardiac Baseline</h3>
               
-              {/* Age Input */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Age</span>
@@ -451,7 +438,6 @@ export default function HealthCalculators() {
                 />
               </div>
 
-              {/* Resting HR Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Resting Heart Rate</span>
@@ -482,7 +468,6 @@ export default function HealthCalculators() {
                 </div>
               </div>
 
-              {/* Target zones block */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs p-2 bg-emerald-50 rounded-lg border border-emerald-100">
                   <span className="font-semibold text-emerald-800">Zone 1: Active Recovery (50% - 60%)</span>
@@ -505,13 +490,12 @@ export default function HealthCalculators() {
           </>
         )}
 
-        {/* TAB CONTENT: BP CLASSIFICATION */}
+        {/* TAB CONTENT: BP */}
         {activeTab === "bp" && (
           <>
             <div className="md:col-span-5 space-y-5">
               <h3 className="font-display font-bold text-slate-900 text-base">Clinician Sphygmomanometer Inputs</h3>
               
-              {/* Systolic Number input */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Systolic Pressure (Upper Value)</span>
@@ -527,7 +511,6 @@ export default function HealthCalculators() {
                 />
               </div>
 
-              {/* Diastolic Number input */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-700">
                   <span>Diastolic Pressure (Lower Value)</span>

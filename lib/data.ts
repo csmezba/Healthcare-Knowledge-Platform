@@ -18,7 +18,7 @@ export const authors: Record<string, Author> = {
     bio: "Dr. James Vance is a registered clinical pharmacist specializing in drug-drug interactions, pediatric compounding, and patient safety protocols. He serves as an advisor to national formulary committees.",
     avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=250",
     expertise: ["Pharmacology", "Drug Interactions", "Geriatric Medicine", "Immunizations"],
-    social: { linkedin: "linkedin.com/in/jamesvancepharmd", email: "james.vance@auracare.org" }
+    social: { linkedin: "linkedin.com/in/jamesvancepharmd", email: "james.vance@takecare.org" }
   },
   dr_marcus: {
     id: "dr_marcus",
@@ -34,7 +34,7 @@ export const authors: Record<string, Author> = {
     name: "Elena Rostova, M.S., R.D., L.D.N.",
     role: "Registered Clinical Dietitian",
     bio: "Elena Rostova is a licensed dietitian specialized in metabolic health, inflammatory disease nutrition, and gut microbiome optimization. She consults for premium athletic organizations and health programs.",
-    avatar: "https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=250",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250",
     expertise: ["Nutrition Science", "Gut Health", "Metabolic Therapy", "Supplements"],
     social: { linkedin: "linkedin.com/in/elenarostovard", twitter: "@ElenaRostovaRD" }
   }
@@ -425,8 +425,8 @@ export const diseases: Disease[] = [
 // Medical Equipment Catalog
 export const medicalEquipment: Equipment[] = [
   {
-    id: "aura-bp-monitor",
-    name: "AuraShield Digital Upper-Arm Blood Pressure Monitor",
+    id: "take-bp-monitor",
+    name: "TakeShield Digital Upper-Arm Blood Pressure Monitor",
     category: "Cardiovascular Diagnostics",
     image: "https://images.unsplash.com/photo-1631815518252-dd12f245658e?auto=format&fit=crop&q=80&w=600",
     rating: 4.8,
@@ -460,8 +460,8 @@ export const medicalEquipment: Equipment[] = [
     ]
   },
   {
-    id: "aura-mesh-nebulizer",
-    name: "AuraBreath Handheld Mesh Nebulizer Pro",
+    id: "take-mesh-nebulizer",
+    name: "TakeBreath Handheld Mesh Nebulizer Pro",
     category: "Respiratory Wellness",
     image: "https://images.unsplash.com/photo-1584017911632-d27860bc404c?auto=format&fit=crop&q=80&w=600",
     rating: 4.9,
@@ -495,3 +495,20 @@ export const medicalEquipment: Equipment[] = [
     ]
   }
 ];
+
+// Data Helper functions for Next.js App Router
+export function getArticleById(id: string): Article | undefined {
+  return articles.find((article) => article.id === id);
+}
+
+export function getMedicineById(id: string): Medicine | undefined {
+  return medicines.find((medicine) => medicine.id === id);
+}
+
+export function getDiseaseById(id: string): Disease | undefined {
+  return diseases.find((disease) => disease.id === id);
+}
+
+export function getEquipmentById(id: string): Equipment | undefined {
+  return medicalEquipment.find((item) => item.id === id);
+}

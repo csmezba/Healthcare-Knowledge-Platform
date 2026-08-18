@@ -1,25 +1,27 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, Play, Pause, Bookmark, Share2, Volume2, Calendar, FileText, ChevronRight, User, ThumbsUp, MessageSquare, Check, ShieldAlert } from "lucide-react";
-import { Article } from "../types";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Play, Pause, Bookmark, Volume2, ChevronRight, ThumbsUp, MessageSquare, Check, ShieldAlert } from "lucide-react";
+import { Article } from "@/lib/types";
 
 interface ArticleDetailPageProps {
   article: Article;
-  onBack: () => void;
-  onNavigate: (view: string, id?: string) => void;
+  onBack?: () => void;
 }
 
-export default function ArticleDetailPage({ article, onBack, onNavigate }: ArticleDetailPageProps) {
+export default function ArticleDetailPage({ article, onBack }: ArticleDetailPageProps) {
+  const router = useRouter();
+
   const [textSize, setTextSize] = useState<"sm" | "md" | "lg">("md");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(article.likes);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Speech TTS states
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechUtterance, setSpeechUtterance] = useState<SpeechSynthesisUtterance | null>(null);
 
-  // Comments state
   const [comments, setComments] = useState<{ name: string; text: string; date: string }[]>([
     { name: "Robert K.", text: "This cardiovascular breakdown of Zone 2 cardio was extremely precise. I've shared this with my father who suffers from high ApoB.", date: "July 16, 2026" },
     { name: "Sarah Miller", text: "Dr. Jenkins writes with wonderful empathy. The section on soluble fiber binding bile acids is brilliant.", date: "July 16, 2026" }
@@ -38,10 +40,8 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Set up Speech Synthesis Utterance
   useEffect(() => {
     if ("speechSynthesis" in window) {
-      // Clean up any ongoing speech when switching articles
       window.speechSynthesis.cancel();
       
       const textToRead = `${article.title}. Written by ${article.author.name}. ${article.summary}. ${article.content.replace(/[#*]/g, "")}`;
@@ -56,6 +56,14 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
       }
     };
   }, [article]);
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
 
   const handleSpeakToggle = () => {
     if (!speechUtterance || !("speechSynthesis" in window)) {
@@ -110,7 +118,7 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
   };
 
   return (
-    <article className="space-y-8" id="article-detail-page">
+    <article className="space-y-8 w-full mx-auto py-6" id="article-detail-page">
       {/* Scroll Progress Indicator */}
       <div className="fixed top-[104px] left-0 w-full h-1 bg-slate-100 z-50">
         <div 
@@ -122,7 +130,7 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
       {/* Breadcrumb & Navigation */}
       <div className="flex items-center justify-between">
         <button 
-          onClick={onBack}
+          onClick={handleBack}
           className="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 font-sans font-semibold text-xs cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -159,16 +167,16 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
           <img 
             src={article.image} 
             alt={article.title} 
-            className="w-full h-full object-cover referrerPolicy='no-referrer'"
+            className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
         </div>
       </div>
 
-      {/* Multi-column layout with Sticky table of contents and main text */}
+      {/* Multi-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* Left Column: Author and Reviewer credentials & TTS widget */}
+        {/* Left Column */}
         <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-32">
           
           {/* Author info */}
@@ -177,7 +185,7 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
               <img 
                 src={article.author.avatar} 
                 alt={article.author.name} 
-                className="h-16 w-16 rounded-xl object-cover border border-slate-100 shadow-sm referrerPolicy='no-referrer'"
+                className="h-16 w-16 rounded-xl object-cover border border-slate-100 shadow-sm"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -255,12 +263,11 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
 
         </div>
 
-        {/* Main Article Content & Interactive Controls */}
+        {/* Main Content */}
         <div className="lg:col-span-9 space-y-8">
           
-          {/* Sizing & Bookmark Tools */}
+          {/* Controls */}
           <div className="bg-slate-50 rounded-2xl p-4 flex items-center justify-between border border-slate-100">
-            {/* Text size adjuster */}
             <div className="flex items-center gap-2">
               <span className="text-xs text-slate-500 font-medium">Text Size:</span>
               <div className="flex bg-white p-1 rounded-lg border border-slate-200">
@@ -278,7 +285,6 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
               </div>
             </div>
 
-            {/* Bookmark & Likes */}
             <div className="flex items-center gap-3">
               <button 
                 onClick={handleLike}
@@ -314,10 +320,9 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
             </div>
           </div>
 
-          {/* Markdown-like Article Body */}
+          {/* Markdown Content */}
           <div className={`markdown-body ${getTextSizeClass()}`}>
             {article.content.split("\n\n").map((para, i) => {
-              // Parse headers or lists inside
               if (para.startsWith("###")) {
                 const headerText = para.replace(/###/g, "").trim();
                 return <h2 key={i} className="font-display font-black text-xl text-slate-900 tracking-tight mt-6 mb-3">{headerText}</h2>;
@@ -348,7 +353,7 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
             })}
           </div>
 
-          {/* Section: Accordion FAQs */}
+          {/* FAQs */}
           <div className="pt-6 border-t border-slate-100" id="clinical-faqs">
             <h4 className="font-display font-bold text-slate-900 text-base mb-4 flex items-center gap-1.5">
               <span>5. Verified Clinical FAQs</span>
@@ -366,7 +371,7 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
             </div>
           </div>
 
-          {/* Section: peer references */}
+          {/* Citations */}
           <div className="pt-6 border-t border-slate-100" id="references">
             <h4 className="font-display font-bold text-slate-400 uppercase tracking-widest text-[10px] mb-3">
               6. Peer-Reviewed Citations & References
@@ -381,14 +386,13 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
             </ul>
           </div>
 
-          {/* Comment System */}
+          {/* Comments */}
           <div className="pt-8 border-t border-slate-100 space-y-6">
             <h4 className="font-display font-bold text-slate-950 text-base flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-blue-600" />
               <span>Patient Community Feedback</span>
             </h4>
 
-            {/* Display comments */}
             <div className="space-y-4">
               {comments.map((cmt, idx) => (
                 <div key={idx} className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1.5">
@@ -401,7 +405,6 @@ export default function ArticleDetailPage({ article, onBack, onNavigate }: Artic
               ))}
             </div>
 
-            {/* Add Comment form */}
             <form onSubmit={handleAddComment} className="bg-slate-50 p-4 rounded-3xl border border-slate-100 space-y-3">
               <span className="text-xs font-bold text-slate-900 block">Submit Feedback Comment</span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
